@@ -1,0 +1,41 @@
+[
+  {
+    "id": "the-curd-shack-cedarburg",
+    "name": "The Curd Shack",
+    "city": "Cedarburg",
+    "county": "Ozaukee",
+    "lat": 43.29650,
+    "lng": -87.98740,
+    "address": "000 W Example St, Cedarburg, WI 53012",
+    "order": "Beer-battered white cheddar, ranch on the side",
+    "price": "$$",
+    "note": "Fried to order, so expect a wait.",
+    "url": "https://example.com"
+  },
+  {
+    "id": "golden-basket-milwaukee",
+    "name": "Golden Basket Tavern",
+    "city": "Milwaukee",
+    "county": "Milwaukee",
+    "lat": 43.03890,
+    "lng": -87.90650,
+    "address": "000 N Example Ave, Milwaukee, WI 53202",
+    "order": "Plain curds, no batter, salt only",
+    "price": "$",
+    "note": "Sample record. Replace with a real place before launch.",
+    "url": "https://example.com"
+  },
+  {
+    "id": "fry-daddys-waukesha",
+    "name": "Fry Daddy's",
+    "city": "Waukesha",
+    "county": "Waukesha",
+    "lat": 43.01170,
+    "lng": -88.23150,
+    "address": "000 E Example Rd, Waukesha, WI 53186",
+    "order": "Garlic-dill curds with a maple aioli",
+    "price": "$$$",
+    "note": "Sample record. Replace with a real place before launch.",
+    "url": "https://example.com"
+  }
+]

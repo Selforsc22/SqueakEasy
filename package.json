@@ -1,0 +1,10 @@
+{
+  "name": "squeak-easy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A map of cheese curds. Anyone can rate the squeak.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
