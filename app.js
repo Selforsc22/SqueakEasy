@@ -8,6 +8,7 @@ import {
   emptyFilters,
   filterPlaces,
   formatScore,
+  isFiniteNumber,
   markerState,
   parseFilters,
   serializeFilters,
@@ -470,6 +471,10 @@ function render() {
 function buildMarkers() {
   if (!hasMap) return;
   for (const place of state.places) {
+    // Places without a resolved lat/lng (see boundsOf's own guard) get a list
+    // row but no pin — Leaflet throws mid-render if you hand it a null latlng.
+    if (!isFiniteNumber(place.lat) || !isFiniteNumber(place.lng)) continue;
+
     const marker = L.marker([place.lat, place.lng], {
       icon: buildIcon(place.id),
       keyboard: true,
