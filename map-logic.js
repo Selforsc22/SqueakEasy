@@ -20,12 +20,12 @@ export const PRICES = ['$', '$$', '$$$'];
  * ponytail: hardcoded box. Upgrade path is deriving it from the full
  * places.json once the real dataset lands, so the fallback follows the data.
  */
-export const DEFAULT_BOUNDS = Object.freeze({
-  south: 42.85,
-  west: -88.35,
-  north: 43.35,
-  east: -87.75
-});
+   export const DEFAULT_BOUNDS = Object.freeze({
+     south: 41.8781,
+     west: -88.5565,
+     north: 44.0247,
+     east: -87.2565
+   });
 
 /** Half-height/width added around a single point so bounds are never zero-area. */
 const SINGLE_POINT_PAD = 0.02;
