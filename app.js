@@ -3,6 +3,7 @@
 
 import {
   COPY,
+  DEFAULT_BOUNDS,
   PRICES,
   boundsOf,
   emptyFilters,
@@ -181,9 +182,22 @@ function refreshAllStates() {
   for (const id of listRows.keys()) refreshMarker(id);
 }
 
+// No filter narrowing things down yet: show the fixed Oshkosh-to-Chicago
+// corridor view (Milwaukee centered) rather than zooming tight to wherever
+// the data happens to cluster. Once a filter is active, fit to what it
+// actually turned up.
+function hasActiveFilters() {
+  const f = state.filters || {};
+  return Boolean(
+    (f.q && f.q.trim()) || (f.price && f.price.trim()) || (f.county && f.county.trim())
+  );
+}
+
 function fitToVisible() {
   if (!hasMap) return;
-  const { south, west, north, east } = boundsOf(state.visible);
+  const { south, west, north, east } = hasActiveFilters()
+    ? boundsOf(state.visible)
+    : DEFAULT_BOUNDS;
   map.fitBounds(
     [[south, west], [north, east]],
     { padding: [32, 32], maxZoom: 14, animate: !reduceMotion }
