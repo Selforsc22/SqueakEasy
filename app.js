@@ -193,15 +193,31 @@ function hasActiveFilters() {
   );
 }
 
+const MILWAUKEE = [43.0389, -87.9065];
+
+// fitBounds alone picks whichever of width/height is the tighter fit for
+// the panel's current shape. On a narrow map panel that's the width, which
+// forces the height dimension to zoom out far past Oshkosh/Chicago (as far
+// as Michigan's UP in practice). Flooring the zoom keeps the default view
+// sane regardless of panel shape; a generously sized panel still zooms in
+// tighter than the floor, via fitBounds' own math.
+const DEFAULT_MIN_ZOOM = 7;
+
 function fitToVisible() {
   if (!hasMap) return;
-  const { south, west, north, east } = hasActiveFilters()
-    ? boundsOf(state.visible)
-    : DEFAULT_BOUNDS;
-  map.fitBounds(
-    [[south, west], [north, east]],
-    { padding: [32, 32], maxZoom: 14, animate: !reduceMotion }
-  );
+
+  if (hasActiveFilters()) {
+    const { south, west, north, east } = boundsOf(state.visible);
+    map.fitBounds(
+      [[south, west], [north, east]],
+      { padding: [32, 32], maxZoom: 14, animate: !reduceMotion }
+    );
+    return;
+  }
+
+  const { south, west, north, east } = DEFAULT_BOUNDS;
+  const fitZoom = map.getBoundsZoom([[south, west], [north, east]], false, [32, 32]);
+  map.setView(MILWAUKEE, Math.max(fitZoom, DEFAULT_MIN_ZOOM), { animate: !reduceMotion });
 }
 
 /* ------------------------------------------------------------------- popup */
