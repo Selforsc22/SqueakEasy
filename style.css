@@ -223,10 +223,6 @@ select {
   list-style: none;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Roughly 4-6 rows tall (rows run ~90px). Keeps the list short enough
-     that the full map is always visible alongside it, instead of the list
-     pushing the map below the fold. */
-  max-height: 30rem;
 }
 
 .place-item + .place-item { border-top: var(--hairline); }
@@ -459,12 +455,26 @@ select {
 /* ---------- desktop ---------- */
 
 @media (min-width: 900px) {
+  /* Single-scrollbar app layout, like a map-search results page: the whole
+     viewport is spoken for by the header, the list column, and the footer,
+     with nothing left over to scroll except the list itself. The map is
+     always fully visible at whatever height remains. */
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+
   .layout { flex-direction: row; }
 
   .panel {
     flex: 0 0 340px;
     border-bottom: 0;
     border-right: var(--hairline);
+  }
+
+  .place-list {
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .map-wrap { flex: 1 1 auto; }
@@ -478,7 +488,11 @@ select {
   .curdography-long { display: none; }
   .curdography-short { display: inline; }
   .layout { flex-direction: column-reverse; }
-  .panel { border-bottom: 0; border-top: var(--hairline); }}
+  .panel { border-bottom: 0; border-top: var(--hairline); }
+
+  /* Roughly 4-6 rows tall, so the stacked mobile layout doesn't turn into
+     one long scroll before you reach the map. */
+  .place-list { max-height: 30rem; }
 }
 
 /* holds to 360px */
