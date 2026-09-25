@@ -223,6 +223,10 @@ select {
   list-style: none;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Roughly 4-6 rows tall (rows run ~90px). Keeps the list short enough
+     that the full map is always visible alongside it, instead of the list
+     pushing the map below the fold. */
+  max-height: 30rem;
 }
 
 .place-item + .place-item { border-top: var(--hairline); }
@@ -474,8 +478,7 @@ select {
   .curdography-long { display: none; }
   .curdography-short { display: inline; }
   .layout { flex-direction: column-reverse; }
-  .panel { border-bottom: 0; border-top: var(--hairline); }
-  .place-list { overflow-y: visible; }
+  .panel { border-bottom: 0; border-top: var(--hairline); }}
 }
 
 /* holds to 360px */
