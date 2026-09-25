@@ -16,16 +16,19 @@ export const MIN_SCORES = 3;
 export const PRICES = ['$', '$$', '$$$'];
 
 /**
- * Fallback view when there is nothing to fit: the Milwaukee metro.
- * ponytail: hardcoded box. Upgrade path is deriving it from the full
- * places.json once the real dataset lands, so the fallback follows the data.
+ * Default regional view: Oshkosh, WI at the north edge, Chicago, IL at the
+ * south edge, Milwaukee roughly centered. Used both as the boot-time view
+ * (before any filter has narrowed things down) and as the fallback when
+ * there is nothing to fit.
+ * ponytail: hardcoded box rather than derived from places.json — this is a
+ * deliberate "show the corridor" view, wider than the data's own footprint.
  */
-   export const DEFAULT_BOUNDS = Object.freeze({
-     south: 41.8781,
-     west: -88.5565,
-     north: 44.0247,
-     east: -87.2565
-   });
+export const DEFAULT_BOUNDS = Object.freeze({
+  south: 41.8781,
+  west: -88.5565,
+  north: 44.0247,
+  east: -87.2565
+});
 
 /** Half-height/width added around a single point so bounds are never zero-area. */
 const SINGLE_POINT_PAD = 0.02;
