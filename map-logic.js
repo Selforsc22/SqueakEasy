@@ -16,18 +16,19 @@ export const MIN_SCORES = 3;
 export const PRICES = ['$', '$$', '$$$'];
 
 /**
- * Default regional view: Oshkosh, WI at the north edge, Chicago, IL at the
- * south edge, Milwaukee roughly centered. Used both as the boot-time view
+ * Default regional view: West Bend, WI near the north edge, Racine, WI near
+ * the south edge, Milwaukee centered. Used both as the boot-time view
  * (before any filter has narrowed things down) and as the fallback when
  * there is nothing to fit.
  * ponytail: hardcoded box rather than derived from places.json — this is a
- * deliberate "show the corridor" view, wider than the data's own footprint.
+ * deliberate "show the corridor" view, slightly wider than the data's own
+ * footprint so edge markers have breathing room.
  */
 export const DEFAULT_BOUNDS = Object.freeze({
-  south: 41.8781,
-  west: -88.5565,
-  north: 44.0247,
-  east: -87.2565
+  south: 42.63,
+  west: -88.55,
+  north: 43.45,
+  east: -87.50
 });
 
 /** Half-height/width added around a single point so bounds are never zero-area. */
