@@ -477,8 +477,12 @@ select {
     min-height: 0;
   }
 
-  .map-wrap { flex: 1 1 auto; }
-  #map { height: 100%; min-height: 420px; }
+  /* No min-height floor here: the whole point of the viewport-locked body
+     above is that the map gets exactly whatever's left after the header and
+     footer. A hard floor just pushes the map past the bottom of the page on
+     a short window instead of shrinking with everything else. */
+  .map-wrap { flex: 1 1 auto; min-height: 0; }
+  #map { height: 100%; }
 
   .curdography-short { display: none; }
   .curdography-long { display: inline; }
