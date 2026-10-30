@@ -206,3 +206,34 @@ export function sortPlaces(places, scores = {}) {
   // Array.prototype.sort is stable, so returning 0 preserves the original order.
   return [...places].sort((a, b) => rank(b) - rank(a));
 }
+
+/**
+ * The highest-rated place among those with enough scores to show an average —
+ * the King of the Curd. Returns { id, avg, count } or null when nothing has
+ * cleared MIN_SCORES yet.
+ *
+ * Ties break on sample size: same average, more scores wins, because it is the
+ * better-evidenced claim. Still tied, the earlier place in the input keeps the
+ * crown, so the title does not flicker between two places on every refresh.
+ */
+export function kingOf(places, scores = {}) {
+  if (!Array.isArray(places)) return null;
+
+  let best = null;
+
+  for (const place of places) {
+    if (!place) continue;
+
+    const entry = scores ? scores[place.id] : null;
+    if (!entry || !isFiniteNumber(entry.count) || entry.count < MIN_SCORES) continue;
+    if (!isFiniteNumber(entry.avg)) continue;
+
+    const better = best === null
+      || entry.avg > best.avg
+      || (entry.avg === best.avg && entry.count > best.count);
+
+    if (better) best = { id: place.id, avg: entry.avg, count: entry.count };
+  }
+
+  return best;
+}
