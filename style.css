@@ -269,6 +269,63 @@ select {
 
 .empty-state { margin: 0; padding: 16px var(--gutter) 24px; }
 
+/* ---------- king of the curd ---------- */
+
+/* No sixth colour: the crown earns its contrast from the nile fill the rest of
+   the page only uses for hover, plus the antwerp rule. */
+.king {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  width: 100%;
+  padding: 9px var(--gutter);
+  border: 0;
+  border-bottom: var(--hairline);
+  background: var(--nile);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.king:hover { background: var(--antwerp); color: var(--cream); }
+.king:hover .king-title,
+.king:hover .king-name,
+.king:hover .icon { color: var(--cream); }
+.king .icon { align-self: center; }
+
+.king-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--antwerp);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.king-name {
+  font-family: var(--display);
+  font-size: 17px;
+  color: var(--antwerp);
+}
+.king-score { font-size: 13px; }
+
+.place-crown {
+  display: inline-flex;
+  margin-left: 6px;
+  vertical-align: -1px;
+}
+.place-button[data-king="true"] { border-left-color: var(--antwerp); }
+
+.popup-king {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--antwerp);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 /* ---------- map ---------- */
 
 .map-wrap {
@@ -326,6 +383,17 @@ select {
   border: 1px solid var(--ink);
   box-shadow: 0 0 0 2px var(--cream);
 }
+/* The crowned pin keeps the antwerp fill and carries a cream crown, so it
+   reads as "winner" rather than as another hover state. */
+.squeak-marker[data-king="true"] { border-width: 2px; }
+.squeak-marker .crown {
+  width: 16px;
+  height: 16px;
+  color: var(--cream);
+}
+.squeak-marker[data-state="hovered"] .crown,
+.squeak-marker[data-state="selected"] .crown { color: var(--antwerp); }
+
 .squeak-marker[data-state="hovered"],
 .squeak-marker[data-state="selected"] {
   width: 34px;
@@ -518,6 +586,14 @@ select {
   select { padding: 7px 10px; }
   .chips label { padding: 6px 11px; }
 
+  /* Chromium wraps details content in ::details-content, so `display: contents`
+     on the element alone leaves a block box between .filters and its fields.
+     Both rules are needed, and they stay separate: engines that don't know the
+     pseudo would drop the whole selector list. */
+  .filter-more { display: flex; align-items: center; gap: 0 14px; }
+  .filter-more::details-content { display: flex; align-items: center; gap: 0 14px; }
+  .filter-more > summary { display: none; }
+
   .result-count { padding: 7px var(--gutter); font-size: 15px; }
 
   .site-footer {
@@ -540,9 +616,61 @@ select {
   .layout { flex-direction: column-reverse; }
   .panel { border-bottom: 0; border-top: var(--hairline); }
 
-  /* Roughly 4-6 rows tall, so the stacked mobile layout doesn't turn into
-     one long scroll before you reach the map. */
-  .place-list { max-height: 30rem; }
+  /* The header was eating 43% of a 390px-wide screen. Wordmark and the
+     curdography link share one row, the tagline goes (the welcome card opens
+     with it anyway), and the search placeholder carries its own label. */
+  .site-header { padding: 10px var(--gutter); }
+  .masthead { flex-wrap: nowrap; gap: 0 10px; }
+  .tagline { display: none; }
+  .wordmark { font-size: 26px; }
+  .curdography-link { font-size: 14px; white-space: nowrap; }
+
+  .filters { margin-top: 8px; gap: 8px; align-items: center; }
+  .field-search { flex: 1 1 100%; }
+  .field-search .field-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .filter-more { flex: 1 1 100%; }
+  .filter-more > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: max-content;
+    padding: 6px 11px;
+    border: var(--hairline);
+    border-radius: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--antwerp);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    list-style: none;
+    cursor: pointer;
+  }
+  .filter-more > summary::-webkit-details-marker { display: none; }
+  .filter-more[open] > summary { margin-bottom: 10px; }
+  .filter-more .field + .field { margin-top: 10px; }
+
+  .result-count { padding: 8px var(--gutter); font-size: 15px; }
+
+  .site-footer { padding: 10px var(--gutter) 12px; }
+  .footer-credit { margin-top: 3px; }
+
+  /* One scroll region: the page. The list used to own a 30rem window nested
+     inside the page scroll, so the map, the list and the page all competed
+     for the same thumb. */
+  .place-list { max-height: none; }
+
+  /* dvh so the map doesn't resize every time iOS Safari's URL bar hides.
+     Browsers without dvh keep the 55vh above. */
+  #map { height: 58dvh; }
 }
 
 /* holds to 360px */
