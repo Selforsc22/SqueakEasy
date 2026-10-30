@@ -20,7 +20,7 @@ import {
 
 // Site keys are public. Secrets live in `wrangler secret`, never here.
 const CONFIG = {
-  WORKER_URL: 'https://squeak-easy.example.workers.dev',
+  WORKER_URL: 'https://squeakeasy.chris-selfors.workers.dev',
   TURNSTILE_SITE_KEY: ''
 };
 
