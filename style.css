@@ -486,6 +486,52 @@ select {
 
   .curdography-short { display: none; }
   .curdography-long { display: inline; }
+
+  /* Flatten the chrome: wordmark and filters share one row, labels sit beside
+     their inputs, and the footer collapses to a single line. Every pixel saved
+     here goes to the map, which is the only thing anyone came for. */
+  :root { --gutter: 16px; }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    gap: 0 24px;
+    padding: 8px var(--gutter);
+  }
+  .masthead { flex: 0 0 auto; gap: 0 12px; }
+  .wordmark { font-size: 26px; }
+  .tagline { display: none; }       /* the welcome card says this already */
+  .curdography-link { margin-left: 0; }
+
+  .filters {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 0;
+    gap: 0 14px;
+  }
+  .field { display: flex; align-items: center; gap: 8px; }
+  .field-label { margin-bottom: 0; }
+  .field-search { flex: 1 1 300px; }
+  .field-search .input-wrap { flex: 1 1 auto; }
+  .input-wrap input { padding: 7px 0; }
+  select { padding: 7px 10px; }
+  .chips label { padding: 6px 11px; }
+
+  .result-count { padding: 7px var(--gutter); font-size: 15px; }
+
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 14px;
+    padding: 7px var(--gutter);
+  }
+  .footer-credit { margin: 0; }
+
+  /* Keep a popped-up card clear of the header instead of letting it tuck
+     under the top edge of the map. */
+  .leaflet-popup-content { margin: 12px; }
 }
 
 @media (max-width: 899px) {
