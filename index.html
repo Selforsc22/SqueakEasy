@@ -43,6 +43,9 @@
       <path d="M4 12h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       <path d="M13 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol id="icon-crown" viewBox="0 0 24 24">
+      <path d="M3 7.5l4.5 4L12 4l4.5 7.5L21 7.5 19 19H5L3 7.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
     <symbol id="icon-price" viewBox="0 0 24 24">
       <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       <path d="M16 7.5A3.5 3.5 0 0 0 12.5 5h-1a3.5 3.5 0 0 0 0 7h1a3.5 3.5 0 0 1 0 7h-1A3.5 3.5 0 0 1 8 16.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -71,38 +74,45 @@
       </div>
     </div>
 
-    <fieldset class="field field-price">
-      <legend class="field-label">
+    <details class="filter-more" id="filter-more">
+      <summary>
         <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-price"/></svg>
-        Price
-      </legend>
-      <div class="chips" id="filter-price">
-        <input type="radio" name="price" id="price-any" value="" checked>
-        <label for="price-any">Any</label>
-        <input type="radio" name="price" id="price-1" value="$">
-        <label for="price-1">$</label>
-        <input type="radio" name="price" id="price-2" value="$$">
-        <label for="price-2">$$</label>
-        <input type="radio" name="price" id="price-3" value="$$$">
-        <label for="price-3">$$$</label>
-      </div>
-    </fieldset>
+        Price &amp; county
+      </summary>
+      <fieldset class="field field-price">
+        <legend class="field-label">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-price"/></svg>
+          Price
+        </legend>
+        <div class="chips" id="filter-price">
+          <input type="radio" name="price" id="price-any" value="" checked>
+          <label for="price-any">Any</label>
+          <input type="radio" name="price" id="price-1" value="$">
+          <label for="price-1">$</label>
+          <input type="radio" name="price" id="price-2" value="$$">
+          <label for="price-2">$$</label>
+          <input type="radio" name="price" id="price-3" value="$$$">
+          <label for="price-3">$$$</label>
+        </div>
+      </fieldset>
 
-    <div class="field field-county">
-      <label class="field-label" for="filter-county">
-        <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-location"/></svg>
-        County
-      </label>
-      <select id="filter-county" name="county">
-        <option value="">All counties</option>
-      </select>
-    </div>
+      <div class="field field-county">
+        <label class="field-label" for="filter-county">
+          <svg class="icon" aria-hidden="true" focusable="false"><use href="#icon-location"/></svg>
+          County
+        </label>
+        <select id="filter-county" name="county">
+          <option value="">All counties</option>
+        </select>
+      </div>
+    </details>
   </form>
 </header>
 
 <main class="layout">
   <section class="panel" aria-labelledby="result-count">
     <h2 class="result-count" id="result-count" role="status">0 of 0 places</h2>
+    <button type="button" class="king" id="king" hidden></button>
     <ul class="place-list" id="place-list"></ul>
     <p class="empty-state" id="empty-state" hidden>No curds match. Clear a filter and try again.</p>
   </section>
@@ -115,8 +125,8 @@
 <footer class="site-footer">
   <p class="footer-line">stay squeakin, keep cheesin</p>
   <p class="footer-credit">
-    Icons after the <a href="https://www.flaticon.com/free-icons/graphic-design">Flaticon graphic design set</a>.
-    Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, tiles by <a href="https://carto.com/attributions">CARTO</a>.
+    Icons after the <a href="https://www.flaticon.com/free-icons/graphic-design" target="_blank" rel="noopener">Flaticon graphic design set</a>.
+    Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, tiles by <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>.
   </p>
 </footer>
 
