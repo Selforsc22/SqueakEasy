@@ -10,6 +10,7 @@ import {
   filterPlaces,
   formatScore,
   isFiniteNumber,
+  kingOf,
   markerState,
   parseFilters,
   serializeFilters,
@@ -46,6 +47,7 @@ const state = {
   places: [],
   scores: {},
   scoresFailed: false,
+  king: null,
   filters: emptyFilters(),
   visible: [],
   selectedId: null,
@@ -62,7 +64,9 @@ const el = {
   county: document.getElementById('filter-county'),
   list: document.getElementById('place-list'),
   count: document.getElementById('result-count'),
+  king: document.getElementById('king'),
   empty: document.getElementById('empty-state'),
+  filterMore: document.getElementById('filter-more'),
   welcome: document.getElementById('welcome'),
   welcomeDismiss: document.getElementById('welcome-dismiss'),
   openWelcome: document.getElementById('open-welcome')
@@ -123,6 +127,10 @@ function icon(name) {
   return svg;
 }
 
+function isKing(placeId) {
+  return Boolean(state.king) && state.king.id === placeId;
+}
+
 function node(tag, className, text) {
   const n = document.createElement(tag);
   if (className) n.className = className;
@@ -148,7 +156,7 @@ if (hasMap) {
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_3vkb_1_34db4946b629e5b925236da2', {
     attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
@@ -162,7 +170,9 @@ function buildIcon(placeId) {
   const size = stateName === 'default' ? 28 : 34;
   return L.divIcon({
     className: '',
-    html: `<span class="squeak-marker" data-state="${stateName}"></span>`,
+    html: `<span class="squeak-marker" data-state="${stateName}"${isKing(placeId) ? ' data-king="true"' : ''}>`
+      + (isKing(placeId) ? '<svg class="crown" aria-hidden="true" focusable="false"><use href="#icon-crown"/></svg>' : '')
+      + '</span>',
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -size / 2]
@@ -235,6 +245,13 @@ function buildPopup(place) {
   score.dataset.scoreFor = place.id;
   score.textContent = `${place.price} · ${scoreText(place.id)}`;
   wrap.appendChild(score);
+
+  if (isKing(place.id)) {
+    const crown = node('p', 'popup-king');
+    crown.appendChild(icon('crown'));
+    crown.appendChild(document.createTextNode('King of the Curd'));
+    wrap.appendChild(crown);
+  }
 
   const links = node('div', 'popup-links');
 
@@ -460,7 +477,16 @@ function buildListRow(place) {
   button.dataset.placeId = place.id;
   button.dataset.state = markerState(place.id, state);
 
-  button.appendChild(node('span', 'place-name', place.name));
+  if (isKing(place.id)) button.dataset.king = 'true';
+
+  const name = node('span', 'place-name', place.name);
+  if (isKing(place.id)) {
+    const badge = node('span', 'place-crown');
+    badge.title = 'King of the Curd';
+    badge.appendChild(icon('crown'));
+    name.appendChild(badge);
+  }
+  button.appendChild(name);
   button.appendChild(node('span', 'place-meta', `${place.city} · ${place.price} · ${scoreText(place.id)}`));
   button.appendChild(node('span', 'place-order', place.order));
 
@@ -475,8 +501,32 @@ function buildListRow(place) {
   return li;
 }
 
+function renderKing() {
+  const king = state.king;
+  el.king.hidden = !king;
+  if (!king) return;
+
+  const place = state.places.find((p) => p.id === king.id);
+  if (!place) {
+    el.king.hidden = true;
+    return;
+  }
+
+  el.king.replaceChildren(
+    icon('crown'),
+    node('span', 'king-title', 'King of the Curd'),
+    node('span', 'king-name', place.name),
+    node('span', 'king-score', formatScore(state.scores[king.id]))
+  );
+}
+
 function render() {
   state.visible = sortPlaces(filterPlaces(state.places, state.filters), state.scores);
+
+  // Crowned among what is on screen, so a filtered view never points at a
+  // place the list cannot show.
+  state.king = kingOf(state.visible, state.scores);
+  renderKing();
   const visibleIds = new Set(state.visible.map((p) => p.id));
 
   // list
@@ -607,6 +657,14 @@ async function boot() {
   el.form.addEventListener('input', onFilterChange);
   el.form.addEventListener('change', onFilterChange);
   el.form.addEventListener('submit', (event) => event.preventDefault());
+  el.king.addEventListener('click', () => { if (state.king) selectPlace(state.king.id); });
+
+  // Price and county collapse on phones and sit open on desktop. CSS can style
+  // a <details> but can't open one, so the breakpoint is mirrored here.
+  const wide = window.matchMedia('(min-width: 900px)');
+  const syncFilterMore = () => { el.filterMore.open = wide.matches; };
+  syncFilterMore();
+  wide.addEventListener('change', syncFilterMore);
 
   try {
     const response = await fetch('places.json');
