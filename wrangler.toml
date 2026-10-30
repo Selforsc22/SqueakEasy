@@ -1,0 +1,12 @@
+name = "squeakeasy"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+
+# ALLOWED_ORIGIN is set as a build variable in Workers Builds; this is the fallback.
+[vars]
+ALLOWED_ORIGIN = "https://selforsc22.github.io"
+
+# Create with: npx wrangler kv namespace create SCORES  → paste the id below.
+[[kv_namespaces]]
+binding = "SCORES"
+id = "82d57e6cbaa84cdf949625e76786a847"
