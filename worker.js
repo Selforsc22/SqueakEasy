@@ -56,6 +56,26 @@ const averages = (agg) =>
     Object.entries(agg).map(([id, { sum, count }]) => [id, { avg: Math.round((sum / count) * 10) / 10, count }])
   );
 
+// Mirrors MIN_SCORES in map-logic.js — the floor before an average is shown.
+const MIN_SCORES = 3;
+
+/**
+ * The same payload the page already consumes, with a running tally in front of
+ * it. "_totals" is safe as a sibling of the place entries because a placeId has
+ * to start with a letter or digit, so nothing can ever collide with it.
+ */
+function withTotals(agg) {
+  const entries = Object.values(agg);
+  return {
+    _totals: {
+      votes: entries.reduce((n, e) => n + e.count, 0),
+      placesRated: entries.length,
+      aboveFloor: entries.filter((e) => e.count >= MIN_SCORES).length
+    },
+    ...averages(agg)
+  };
+}
+
 export default {
   async fetch(request, env) {
     const origin = allowedOrigin(request, env);
@@ -66,7 +86,7 @@ export default {
 
     const agg = (await env.SCORES.get(AGG_KEY, 'json')) || {};
 
-    if (request.method === 'GET') return json(averages(agg), 200, origin);
+    if (request.method === 'GET') return json(withTotals(agg), 200, origin);
     if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405, origin);
     if (!origin) return json({ error: 'forbidden' }, 403, null);
 
